@@ -17,7 +17,7 @@ class FormMenuSettings(Form):
         # BACK
         self.boton1 = Button(master = self, x = 20, y = 180, w = 180, h = 80,
             color_background = None, color_border = None,image_background = "images\gui\set_gui_01\Comic_Border\Buttons\Button_XL_06.png",
-            on_click = self.on_click_boton1,on_click_param = "form_game_L1",text = "BACK",font = "Times",font_size = 30,font_color = C_BLACK)
+            on_click = self.on_click_boton1,on_click_param = "form_game_L2",text = "BACK",font = "Times",font_size = 30,font_color = C_BLACK)
         # vol+
         self.boton2 = Button(master = self, x = 20, y = 20, w = 180, h = 80, color_background = None,
             color_border = None, image_background = "images/gui/set_gui_01/Comic_Border/Buttons/Button_XL_06.png", 
@@ -40,12 +40,10 @@ class FormMenuSettings(Form):
         pygame.mixer.music.set_volume(1)
 
     def on_click_boton3(self,parametro):
-        pygame.mixer.music.set_volume(0.2)  # Reducir el volumen a la mitad (0.0 - 1.0)
+        pygame.mixer.music.set_volume(0.2)  # Reducir el volumen a la mitad (0.0 - 1.0) 
     
     def on_click_boton4(self,parametro):
         pygame.mixer.music.set_volume(0)
-
-    
 
     def update(self, lista_eventos, keys, delta_ms):
         for aux_widget in self.lista_widget:

@@ -1,7 +1,7 @@
 import pygame
 from constantes import *
 from auxiliar import Auxiliar
-from bullet import Bullet
+from disparos import Fire
 class Player:
     def __init__(self,x,y,speed_walk,speed_run,gravity,jump_power,frame_rate_ms,move_rate_ms,jump_height,p_scale=1,interval_time_jump=100) -> None:
         '''
@@ -43,6 +43,7 @@ class Player:
         self.is_fall = False
         self.is_shoot = False
         self.is_knife = False
+        self.direccion = 1
 
         self.tiempo_transcurrido_animation = 0
         self.frame_rate_ms = frame_rate_ms 
@@ -54,6 +55,7 @@ class Player:
         self.tiempo_transcurrido = 0
         self.tiempo_last_jump = 0 # en base al tiempo transcurrido general
         self.interval_time_jump = interval_time_jump
+        self.grupo_balas = pygame.sprite.Group()
         
     def points(self,coin_list):
         for coins in coin_list:
@@ -91,7 +93,7 @@ class Player:
     def receive_shoot(self):
         self.lives -= 1
 
-    def knife(self,on_off = True):
+    def saber(self,on_off = True):
         self.is_knife = on_off
         if(on_off == True and self.is_jump == False and self.is_fall == False):
             if(self.animation != self.knife_r and self.animation != self.knife_l):
@@ -187,6 +189,7 @@ class Player:
         self.do_movement(delta_ms,plataform_list)
         self.do_animation(delta_ms)
         self.points(list_coin)
+        
     
     def draw(self,screen):
         
@@ -196,6 +199,7 @@ class Player:
         
         self.image = self.animation[self.frame]
         screen.blit(self.image,self.rect)
+        self.grupo_balas.draw(screen)
         
 
     def events(self,delta_ms,keys):
@@ -238,12 +242,20 @@ class Player:
             self.shoot(False)  
 
         if(not keys[pygame.K_a]):
-            self.knife(False)  
+            self.saber(False)  
 
         if(keys[pygame.K_s] and not keys[pygame.K_a]and not keys[pygame.K_LEFT] and not keys[pygame.K_RIGHT] and not keys[pygame.K_SPACE]):
             self.move_x= 0
-            self.shoot()   
-        
+            #self.shoot() 
+            self.shooting()  
+
         if(keys[pygame.K_a] and not keys[pygame.K_s]and not keys[pygame.K_LEFT] and not keys[pygame.K_RIGHT] and not keys[pygame.K_SPACE]):
             self.move_x= 0
-            self.knife()   
+            self.saber()   
+           
+    def shooting(self):            
+        bullet_img = pygame.image.load("images\caracters\players\zero/bullet (1).png").convert_alpha()
+        bullet = Fire(self.rect.centerx + (0.75 * self.rect.size[0] * self.direccion), self.rect.centery, self.direccion, bullet_img)
+        self.grupo_balas.add(bullet)
+        print("esta disparando")
+        

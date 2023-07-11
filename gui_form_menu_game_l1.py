@@ -36,7 +36,7 @@ class FormGameLevel1(Form):
         self.enemy_list = []
         for Enemigos in datos_extraidos["niveles"]["nivel_1"]["config_enemigos"]:
             x,y,speed_walk,speed_run,gravity,frame_rate_ms,move_rate_ms,jump_power,jump_height,p_scale = Enemigos
-            self.plataform_list.append(Enemy(x,y,speed_walk,speed_run,gravity,frame_rate_ms,move_rate_ms,jump_power,jump_height,p_scale))
+            self.enemy_list.append(Enemy(x,y,speed_walk,speed_run,gravity,frame_rate_ms,move_rate_ms,jump_power,jump_height,p_scale))
 
         # self.enemy_list.append(Enemy(x=500,y=400,speed_walk=4,speed_run=4,gravity=8,frame_rate_ms=85,move_rate_ms=50,jump_power=30,jump_height=140,p_scale=3))
         # self.enemy_list.append(Enemy(x=900,y=400,speed_walk=4,speed_run=4,gravity=8,frame_rate_ms=85,move_rate_ms=50,jump_power=30,jump_height=140,p_scale=3))
@@ -58,13 +58,17 @@ class FormGameLevel1(Form):
         # self.plataform_list.append(Plataform(x=950,y=480,width=50,height=50,type=15))
         ##listas coin
         self.coin_list = []
-        for Plataforma in datos_extraidos["niveles"]["nivel_1"]["config_coins"]:
-            xx,yy,width,height,tipo= Plataforma
+        for Coin in datos_extraidos["niveles"]["nivel_1"]["config_coins"]:
+            xx,yy,width,height,tipo= Coin
             self.coin_list.append(Coins(xx,yy,width,height,tipo))
         # self.coin_list.append(Coins(xx=450 , yy=588, width=8, height=8, tipo=1))
         # self.coin_list.append(Coins(xx=300 , yy=322, width=8, height=8, tipo=1))
         # self.coin_list.append(Coins(xx=300 , yy=388, width=8, height=8, tipo=1))
         # self.coin_list.append(Coins(xx=300 , yy=400, width=8, height=8, tipo=1))
+
+        ##disparos
+        self.bullet_list = []
+        #for bullet in datos_extraidos["niveles"]["nivel"]["config_bullet"]
 
         #Timer
         self.is_paused = False
@@ -80,8 +84,6 @@ class FormGameLevel1(Form):
         self.score_image = pygame.image.load("images/gui/set_gui_01/Comic_Border/Buttons/Button_M_02.png").convert_alpha()
         self.score_image = pygame.transform.scale(self.score_image, (200, 50))
 
-        ##disparos
-        self.bullet_list = []
 
     def on_click_boton1(self, parametro):
         self.set_active(parametro)
@@ -100,6 +102,26 @@ class FormGameLevel1(Form):
         for enemy_element in self.enemy_list:
             enemy_element.update(delta_ms,self.plataform_list)
         
+        enemy_element = None  # Inicializa la variable enemy_element con un valor predeterminado
+
+        for enemy in self.enemy_list:
+            
+            if self.player_1.rect.colliderect(enemy.rect) and self.player_1.rect.top < enemy.rect.bottom:
+                enemy_element = enemy
+                break  # Termina el bucle una vez que se encuentra el enemigo correspondiente
+
+        if enemy_element is not None:
+            self.enemy_list.remove(enemy_element)
+            self.player_1.score += 10
+            self.pb_lives.value = self.player_1.lives
+
+        # rect_enemy = enemy_element.rect
+        # if self.player_1.rect.colliderect(rect_enemy) and self.player_1.rect.top < rect_enemy.bottom:
+        #     self.enemy_list.remove(enemy_element)
+        #     self.player_1.score += 10
+        #     self.pb_lives.value = self.player_1.lives
+            
+
         if not self.player_moved:
             if keys[K_LEFT] or keys[K_RIGHT]:
                 self.player_moved = True
@@ -116,6 +138,7 @@ class FormGameLevel1(Form):
     def draw(self): 
         super().draw()
         self.static_background.draw(self.surface)
+        self.player_1.draw(self.surface)
 
         for aux_widget in self.widget_list:    
             aux_widget.draw()
@@ -125,8 +148,6 @@ class FormGameLevel1(Form):
 
         for enemy_element in self.enemy_list:
             enemy_element.draw(self.surface)
-        
-        self.player_1.draw(self.surface)
 
         for bullet_element in self.bullet_list:
             bullet_element.draw(self.surface)
