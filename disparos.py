@@ -11,7 +11,7 @@ class Fire(pygame.sprite.Sprite):
 
 	def update(self, world, player, grupo_enemigos, grupo_balas):
 		self.rect.x += (self.direccion * self.velocidad) 
-		if self.rect.right < 0 or self.rect.left > ANCHO_PANTALLA:
+		if self.rect.right < 0 or self.rect.left > ANCHO_VENTANA:
 			self.kill()
 
 		collision_list = pygame.sprite.spritecollide(self, world.platform_group, False)
@@ -34,4 +34,3 @@ class Fire(pygame.sprite.Sprite):
 						enemigo.kill()
 	def draw(self, pantalla):
 		pantalla.blit(self.image, self.rect)
-	

@@ -246,16 +246,16 @@ class Player:
 
         if(keys[pygame.K_s] and not keys[pygame.K_a]and not keys[pygame.K_LEFT] and not keys[pygame.K_RIGHT] and not keys[pygame.K_SPACE]):
             self.move_x= 0
-            #self.shoot() 
-            self.shooting()  
+            self.shoot() 
+             
 
         if(keys[pygame.K_a] and not keys[pygame.K_s]and not keys[pygame.K_LEFT] and not keys[pygame.K_RIGHT] and not keys[pygame.K_SPACE]):
             self.move_x= 0
             self.saber()   
            
-    def shooting(self):            
-        bullet_img = pygame.image.load("images\caracters\players\zero/bullet (1).png").convert_alpha()
-        bullet = Fire(self.rect.centerx + (0.75 * self.rect.size[0] * self.direccion), self.rect.centery, self.direccion, bullet_img)
-        self.grupo_balas.add(bullet)
-        print("esta disparando")
-        
+    # def shooting(self):            
+    #     bullet_img = pygame.image.load("images\caracters\players\zero/bullet (1).png").convert_alpha()
+    #     bullet = Fire(self.rect.centerx + (0.75 * self.rect.size[0] * self.direccion), self.rect.centery, self.direccion, bullet_img)
+    #     self.grupo_balas.add(bullet)
+    #     print("esta disparando")
+    

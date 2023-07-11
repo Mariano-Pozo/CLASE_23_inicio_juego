@@ -30,16 +30,16 @@ coin_list.append(Coins(xx=300 , yy=388, width=8, height=8, type=1))
 coin_list.append(Coins(xx=300 , yy=400, width=8, height=8, type=1))
 
 plataform_list = []
-plataform_list.append(Plataform(x=400,y=580,width=50,height=50,type=0))
-plataform_list.append(Plataform(x=450,y=580,width=50,height=50,type=1))
-plataform_list.append(Plataform(x=500,y=580,width=50,height=50,type=2))
-plataform_list.append(Plataform(x=600,y=550,width=50,height=50,type=12))
-plataform_list.append(Plataform(x=650,y=550,width=50,height=50,type=14))
-plataform_list.append(Plataform(x=750,y=480,width=50,height=50,type=12))
-plataform_list.append(Plataform(x=800,y=480,width=50,height=50,type=13))
-plataform_list.append(Plataform(x=850,y=480,width=50,height=50,type=13))
-plataform_list.append(Plataform(x=900,y=480,width=50,height=50,type=14))
-plataform_list.append(Plataform(x=950,y=480,width=50,height=50,type=15))
+# plataform_list.append(Plataform(x=400,y=580,width=50,height=50,type=0))
+# plataform_list.append(Plataform(x=450,y=580,width=50,height=50,type=1))
+# plataform_list.append(Plataform(x=500,y=580,width=50,height=50,type=2))
+# plataform_list.append(Plataform(x=600,y=550,width=50,height=50,type=12))
+# plataform_list.append(Plataform(x=650,y=550,width=50,height=50,type=14))
+# plataform_list.append(Plataform(x=750,y=480,width=50,height=50,type=12))
+# plataform_list.append(Plataform(x=800,y=480,width=50,height=50,type=13))
+# plataform_list.append(Plataform(x=850,y=480,width=50,height=50,type=13))
+# plataform_list.append(Plataform(x=900,y=480,width=50,height=50,type=14))
+# plataform_list.append(Plataform(x=950,y=480,width=50,height=50,type=15))
          
 while True:     
     for event in pygame.event.get():

@@ -27,7 +27,7 @@ class FormGameLevel3(Form):
         self.widget_list = [self.boton1,self.boton2,self.pb_lives,self.boton_shoot]
 
         # --- GAME ELEMNTS --- 
-        self.static_background = Background(x=0,y=0,width=w,height=h,path="images/background/image (3).png")
+        self.static_background = Background(x=0,y=0,width=w,height=h,path="images/background/image (1).png")
         # data extraida del json
         datos_extraidos = Auxiliar.leer_json("config.json")
 
