@@ -78,10 +78,13 @@ class Enemy():
                     self.move_x = -self.speed_walk
                     self.animation = self.walk_l
                     self.contador += 1 
+                    self.direction = DIRECTION_L
                 elif self.contador <= 100:
                     self.move_x = self.speed_walk
                     self.animation = self.walk_r
                     self.contador += 1
+                    self.direction = DIRECTION_R
+
                 else:
                     self.contador = 0
     

@@ -66,5 +66,5 @@ class Bullet():
     def draw(self,screen):
         if(self.is_active):
             if(DEBUG):
-                pygame.draw.rect(screen,color=(255,0 ,0),rect=self.collition_rect)
+                pygame.draw.rect(screen,color=(255,0 ,0),rect=self.rect)
             screen.blit(self.image,self.rect)

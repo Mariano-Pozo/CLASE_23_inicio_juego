@@ -13,6 +13,7 @@ from plataforma import Plataform
 from background import Background
 from bullet import Bullet
 from botin import Coins
+from trap import Fire
 
 class FormGameLevel1(Form):
     def __init__(self,name,master_surface,x,y,w,h,color_background,color_border,active):
@@ -33,42 +34,29 @@ class FormGameLevel1(Form):
 
         self.player_1 = Player(x=0,y=400,speed_walk=10,speed_run=12,gravity=14,jump_power=35,frame_rate_ms=100,move_rate_ms=50,jump_height=140,p_scale=3,interval_time_jump=300)
 
+        self.trap_list = []
+        for Traps in datos_extraidos["niveles"]["nivel_1"]["config_trap"]:
+            x,y,w,h= Traps
+            self.trap_list.append(Fire(x,y,w,h))
+
         self.enemy_list = []
         for Enemigos in datos_extraidos["niveles"]["nivel_1"]["config_enemigos"]:
             x,y,speed_walk,speed_run,gravity,frame_rate_ms,move_rate_ms,jump_power,jump_height,p_scale = Enemigos
             self.enemy_list.append(Enemy(x,y,speed_walk,speed_run,gravity,frame_rate_ms,move_rate_ms,jump_power,jump_height,p_scale))
-
-        # self.enemy_list.append(Enemy(x=500,y=400,speed_walk=4,speed_run=4,gravity=8,frame_rate_ms=85,move_rate_ms=50,jump_power=30,jump_height=140,p_scale=3))
-        # self.enemy_list.append(Enemy(x=900,y=400,speed_walk=4,speed_run=4,gravity=8,frame_rate_ms=85,move_rate_ms=50,jump_power=30,jump_height=140,p_scale=3))
         
         self.plataform_list = []
         for Plataforma in datos_extraidos["niveles"]["nivel_1"]["config_plataformas"]:
             x,y,w,h,tipo= Plataforma
             self.plataform_list.append(Plataform(x,y,w,h,tipo))
             
-        # self.plataform_list.append(Plataform(x=400,y=580,width=50,height=50,type=0))
-        # self.plataform_list.append(Plataform(x=450,y=580,width=50,height=50,type=1))
-        # self.plataform_list.append(Plataform(x=500,y=580,width=50,height=50,type=2))
-        # self.plataform_list.append(Plataform(x=600,y=550,width=50,height=50,type=12))
-        # self.plataform_list.append(Plataform(x=650,y=550,width=50,height=50,type=14))
-        # self.plataform_list.append(Plataform(x=750,y=480,width=50,height=50,type=12))
-        # self.plataform_list.append(Plataform(x=800,y=480,width=50,height=50,type=13))
-        # self.plataform_list.append(Plataform(x=850,y=480,width=50,height=50,type=13))
-        # self.plataform_list.append(Plataform(x=900,y=480,width=50,height=50,type=14))
-        # self.plataform_list.append(Plataform(x=950,y=480,width=50,height=50,type=15))
         ##listas coin
         self.coin_list = []
         for Coin in datos_extraidos["niveles"]["nivel_1"]["config_coins"]:
             xx,yy,width,height,tipo= Coin
             self.coin_list.append(Coins(xx,yy,width,height,tipo))
-        # self.coin_list.append(Coins(xx=450 , yy=588, width=8, height=8, tipo=1))
-        # self.coin_list.append(Coins(xx=300 , yy=322, width=8, height=8, tipo=1))
-        # self.coin_list.append(Coins(xx=300 , yy=388, width=8, height=8, tipo=1))
-        # self.coin_list.append(Coins(xx=300 , yy=400, width=8, height=8, tipo=1))
 
         ##disparos
         self.bullet_list = []
-        #for bullet in datos_extraidos["niveles"]["nivel"]["config_bullet"]
 
         #Timer
         self.is_paused = False
@@ -84,15 +72,65 @@ class FormGameLevel1(Form):
         self.score_image = pygame.image.load("images/gui/set_gui_01/Comic_Border/Buttons/Button_M_02.png").convert_alpha()
         self.score_image = pygame.transform.scale(self.score_image, (200, 50))
 
+        # CD Shoot
+        self.can_shoot = True
+        self.can_shoot_player = True
+        self.shoot_cooldown = 1000
+        self.last_shoot_time = 0   
+
 
     def on_click_boton1(self, parametro):
         self.set_active(parametro)
 
+    #boton de disparo x defecto
     def on_click_shoot(self, parametro):
         for enemy_element in self.enemy_list:
             self.bullet_list.append(Bullet(enemy_element,enemy_element.rect.centerx,enemy_element.rect.centery,self.player_1.rect.centerx,self.player_1.rect.centery,20,path="images/gui/set_gui_01/Comic_Border/Bars/Bar_Segment05.png",frame_rate_ms=120,move_rate_ms=20,width=5,height=5))
 
+
+    
+    def automatic_shoot(self):
+        self.contador_cd = pygame.time.get_ticks() 
+
+        for self.enemy in self.enemy_list:
+            if self.enemy.collition_rect.colliderect(self.player_1.rect_disparos) and self.can_shoot and self.player_1.lives > 0 and self.enemy.lives >0:
+                if self.enemy.direction == DIRECTION_R:
+                    self.bullet_list.append(Bullet(self.enemy, self.enemy.rect.right, self.enemy.rect.centery, 1800, self.enemy.rect.centery, 5, path="images/caracters/enemies/ork_sword/IDLE/bullet (1).png", frame_rate_ms=50, move_rate_ms=20, width=8, height=10))
+                    self.can_shoot = False
+                    self.last_shoot_time = self.contador_cd
+                elif self.enemy.direction != DIRECTION_R:
+                    self.bullet_list.append(Bullet(self.enemy, self.enemy.rect.left, self.enemy.rect.centery, 0, self.enemy.rect.centery, 5, path="images/caracters/enemies/ork_sword/IDLE/bullet (1).png", frame_rate_ms=50, move_rate_ms=20, width=8, height=10))
+                    self.can_shoot = False
+                    self.last_shoot_time = self.contador_cd
+
+            if not self.can_shoot and self.contador_cd - self.last_shoot_time >= self.shoot_cooldown:
+                self.can_shoot = True
+        
+        if pygame.key.get_pressed()[pygame.K_s]:   
+            self.contador_cd_player = pygame.time.get_ticks()
+            if self.player_1.direction == DIRECTION_R:
+                self.bullet_list.append(Bullet(self.player_1, x_init=self.player_1.rect.right + 14, y_init=self.player_1.rect.centery - 13, x_end=1800, y_end=self.player_1.rect.centery, speed=5, path="images/caracters/enemies/ork_sword/IDLE/bullet (1).png", frame_rate_ms=50, move_rate_ms=20, width=8, height=10))
+                self.can_shoot_player = False
+                self.last_shoot_time = self.contador_cd_player
+            elif self.player_1.direction == DIRECTION_L:
+                self.bullet_list.append(Bullet(self.player_1, x_init=self.player_1.rect.left + 14, y_init=self.player_1.rect.centery - 13, x_end=0, y_end=self.player_1.rect.centery, speed=5, path="images/caracters/enemies/ork_sword/IDLE/bullet (1).png", frame_rate_ms=50, move_rate_ms=20, width=8, height=10))
+                self.can_shoot_player = False
+                self.last_shoot_time = self.contador_cd_player
+
+
+
     def update(self, lista_eventos,keys,delta_ms):
+        for trap_element in self.trap_list:
+            trap_element.loop()
+            trap_element.update(delta_ms,self.plataform_list)
+
+            #if self.player_1.rect.colliderect(trap_element.rect) and self.player_1.rect.top < enemy.rect.bottom and keys[K_a]:
+             #   pass
+
+                
+                
+
+
         for aux_widget in self.widget_list:
             aux_widget.update(lista_eventos)
 
@@ -101,6 +139,10 @@ class FormGameLevel1(Form):
 
         for enemy_element in self.enemy_list:
             enemy_element.update(delta_ms,self.plataform_list)
+
+
+    
+        self.automatic_shoot()
         
         enemy_element = None  # Inicializa la variable enemy_element con un valor predeterminado
 
@@ -108,12 +150,18 @@ class FormGameLevel1(Form):
             
             if self.player_1.rect.colliderect(enemy.rect) and self.player_1.rect.top < enemy.rect.bottom:
                 enemy_element = enemy
+                enemy.lives -= 1
+                if enemy.lives <= 0 and not None:
+                    self.enemy_list.remove(enemy_element)
+                    self.player_1.score += 10
+                    self.pb_lives.value = self.player_1.lives
+
                 break  # Termina el bucle una vez que se encuentra el enemigo correspondiente
 
-        if enemy_element is not None:
-            self.enemy_list.remove(enemy_element)
-            self.player_1.score += 10
-            self.pb_lives.value = self.player_1.lives
+        # if enemy_element is not None:
+        #     self.enemy_list.remove(enemy_element)
+        #     self.player_1.score += 10
+        #     self.pb_lives.value = self.player_1.lives
 
         # rect_enemy = enemy_element.rect
         # if self.player_1.rect.colliderect(rect_enemy) and self.player_1.rect.top < rect_enemy.bottom:
@@ -154,6 +202,9 @@ class FormGameLevel1(Form):
 
         for coin in self.coin_list:
             coin.draw(self.surface)
+
+        for trampa in self.trap_list:
+            trampa.draw(self.surface)
 
         #SCORE
         self.surface.blit(self.score_image, (170, 0))
