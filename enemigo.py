@@ -3,6 +3,7 @@ from player import *
 from constantes import *
 from auxiliar import Auxiliar
 
+
 class Enemy():
     
     def __init__(self,x,y,speed_walk,speed_run,gravity,jump_power,frame_rate_ms,move_rate_ms,jump_height,p_scale=1,interval_time_jump=100) -> None:

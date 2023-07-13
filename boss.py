@@ -2,6 +2,8 @@ import pygame
 from player import *
 from constantes import *
 from auxiliar import Auxiliar
+from bullet import Bullet
+
 class Boss():
     
     def __init__(self,x,y,speed_walk,speed_run,gravity,jump_power,frame_rate_ms,move_rate_ms,jump_height,p_scale=1,interval_time_jump=100) -> None:
@@ -135,12 +137,12 @@ class Boss():
         self.contador_cd = pygame.time.get_ticks() 
         if self.puede_golpear_jugador(jugador):
             if self.direction == DIRECTION_R:
-                lista.append(Bullet(self, self.rect.right, self.rect.centery, 1800, self.rect.centery, 5, path="images/caracters/enemies/ork_sword/IDLE/bullet (1).png", frame_rate_ms=50, move_rate_ms=20, width=8, height=10))
-               
+                lista.append(Bullet(self, self.rect.left, self.rect.centery, 1800, self.rect.centery, -5, path="images/caracters/enemies/ork_sword/IDLE/boss_fire (1).png", frame_rate_ms=50, move_rate_ms=20, width=8, height=10))
+                print("direct R")
                 
             elif self.direction != DIRECTION_R:
-                lista.append(Bullet(self, self.rect.left, self.rect.centery, 0, self.rect.centery, 5, path="images/caracters/enemies/ork_sword/IDLE/bullet (1).png", frame_rate_ms=50, move_rate_ms=20, width=8, height=10))
-            
+                lista.append(Bullet(self, self.rect.right, self.rect.centery, 0, self.rect.centery, 5, path="images/caracters/enemies/ork_sword/IDLE/boss_fire (1).png", frame_rate_ms=50, move_rate_ms=20, width=8, height=10))
+                print("direct L")
     def do_knife(self,jugador):
         if self.collition_rect.colliderect(jugador.collition_rect) and self.can_shoot():
             self.melee_attack(jugador)

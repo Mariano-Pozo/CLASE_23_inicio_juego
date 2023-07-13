@@ -2,7 +2,7 @@ from player import *
 from constantes import *
 from auxiliar import Auxiliar
 import math
-from boss import Boss
+
 
 class Bullet():
     

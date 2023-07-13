@@ -41,7 +41,7 @@ class FormGameLevel3(Form):
         datos_extraidos = Auxiliar.leer_json("config.json")
 
         self.player_1 = Player(x=0,y=400,speed_walk=10,speed_run=12,gravity=14,jump_power=35,frame_rate_ms=100,move_rate_ms=50,jump_height=140,p_scale=3,interval_time_jump=300)
-        self.boss = Boss(x=900,y=500,speed_walk=0,speed_run=0,gravity=18,frame_rate_ms=100,move_rate_ms=50,jump_power=30,jump_height=150,p_scale=3)
+        self.boss = Boss(x=1050,y=500,speed_walk=0,speed_run=0,gravity=18,frame_rate_ms=100,move_rate_ms=50,jump_power=30,jump_height=150,p_scale=3)
     
         self.trap_list = []
         for Traps in datos_extraidos["niveles"]["nivel_3"]["config_trap"]:
