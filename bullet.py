@@ -51,12 +51,15 @@ class Bullet():
     def check_impact(self,plataform_list,enemy_list,player):
         if(self.is_active and self.owner != player and self.rect.colliderect(player.rect)):
             print("IMPACTO PLAYER")
-            player.receive_shoot()
+            player.receive_shoot()#player.lives -= 1
             self.is_active = False
         for aux_enemy in enemy_list:
             if(self.is_active and self.owner != aux_enemy and self.rect.colliderect(aux_enemy.rect)):
                 print("IMPACTO ENEMY")
                 self.is_active = False
+                aux_enemy.lives -= 1
+                if aux_enemy.lives <= 0:
+                    enemy_list.remove(aux_enemy)
 
     def update(self,delta_ms,plataform_list,enemy_list,player):
         self.do_movement(delta_ms,plataform_list,enemy_list,player)

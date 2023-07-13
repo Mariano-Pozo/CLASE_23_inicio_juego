@@ -36,12 +36,6 @@ class Object(pygame.sprite.Sprite):
         self.height = h
         self.name = name
 
-class Block(Object):
-    def __init__(self,x,y,size):
-        super().__init__(x, y,size,size)
-        Block = load_block(size)
-        self.image.blit(lock,(b0,0))
-        self.mask = pygame.mask.from_surface(self.image)
 # ----------------------  ---------------------------
 # clase para aplicar trampas
 class Fire(Object):
@@ -54,6 +48,16 @@ class Fire(Object):
         self.mask = pygame.mask.from_surface(self.image)
         self.animation_count = 0
         self.animation_name = "off"
+    def check_colision(self, jugador):
+        if self.rect.colliderect(jugador.rect):  # Verificar colisión entre rectángulos
+            if pygame.sprite.collide_mask(self, jugador):  # Verificar colisión precisa con máscaras
+                # Colisión detectada entre el enemigo y el jugador
+                # Realizar acciones adicionales según sea necesario
+                print("¡Colisión detectada!")
+                # Ejemplo: Reducir la vida del jugador
+                jugador.lives -= 1
+        
+
 
     def on(self):
         self.animation_name = "on"

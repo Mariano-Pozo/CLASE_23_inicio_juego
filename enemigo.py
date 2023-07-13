@@ -14,7 +14,7 @@ class Enemy():
         self.hit_r = Auxiliar.getSurfaceFromSeparateFiles("images/caracters/enemies/ork_sword/IDLE/mele_attack ({}).png",1,5,scale=p_scale)
         self.hit_l = Auxiliar.getSurfaceFromSeparateFiles("images/caracters/enemies/ork_sword/IDLE/mele_attack ({}).png",1,5,scale=p_scale)
 
-
+        self.ultimo_disparo=0
         self.contador = 0
         self.frame = 0
         self.lives = 5
@@ -121,9 +121,53 @@ class Enemy():
             else: 
                 self.frame = 0
 
-    def update(self,delta_ms,plataform_list):
+    def can_shoot(self):
+        contador_disparo = pygame.time.get_ticks() 
+        if contador_disparo - self.ultimo_disparo > 2000:
+            self.ultimo_disparo = contador_disparo
+            return True
+        else:
+            return False
+
+
+    def puede_golpear_jugador(self,jugador):
+        return self.collition_rect.colliderect(jugador.rect_disparos) and self.can_shoot() and jugador.lives > 0 and self.lives >0
+
+
+    def automatic_shoot(self,jugador,lista):
+        self.contador_cd = pygame.time.get_ticks() 
+        if self.puede_golpear_jugador(jugador):
+            if self.direction == DIRECTION_R:
+                lista.append(Bullet(self, self.rect.right, self.rect.centery, 1800, self.rect.centery, 5, path="images/caracters/enemies/ork_sword/IDLE/bullet (1).png", frame_rate_ms=50, move_rate_ms=20, width=8, height=10))
+               
+                
+            elif self.direction != DIRECTION_R:
+                lista.append(Bullet(self, self.rect.left, self.rect.centery, 0, self.rect.centery, 5, path="images/caracters/enemies/ork_sword/IDLE/bullet (1).png", frame_rate_ms=50, move_rate_ms=20, width=8, height=10))
+            
+    def do_knife(self,jugador):
+        if self.collition_rect.colliderect(jugador.collition_rect) and self.can_shoot():
+            self.melee_attack(jugador)
+
+
+    def melee_attack(self,jugador):  
+        
+        if(self.is_jump == False and self.is_fall == False):
+            if(self.animation != self.hit_r and self.animation != self.hit_l):
+                self.frame = 0
+                if(self.direction == DIRECTION_R):
+                    self.animation = self.hit_r
+                else:
+                    self.animation = self.hit_l      
+                jugador.receive_shoot()
+        
+
+
+    def update(self,delta_ms,plataform_list,jugador,lista):
         self.do_movement(delta_ms,plataform_list)
-        self.do_animation(delta_ms) 
+        self.do_animation(delta_ms)
+        self.automatic_shoot(jugador,lista)
+        self.do_knife(jugador)
+        
 
     def draw(self,screen):
         
@@ -136,17 +180,7 @@ class Enemy():
 
     def receive_shoot(self):
         self.lives -= 1
-    #checkear esto
-    def golpear(self, direccion: int) -> None:
-        match direccion:
-            case 0:
-                self.animacion = self.hit_r
-            case 1:
-                self.animacion = self.hit_l
-        
-        self.move_x = 0
-        self.move_y = 0
-        self.frame = 0
+
     
 
     def kill_enemy(self):
@@ -154,12 +188,7 @@ class Enemy():
         if self.lives <= 0:
             Player.score += 1000
 
-    def update(self, delta_ms, platform_list):
-        self.do_movement(delta_ms, platform_list)
-        self.do_animation(delta_ms)
-
-        #if Player.ground_collition_rect.colliderect(self.rect):
-         #   self.kill_enemy()
+    
     
 
 

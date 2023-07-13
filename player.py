@@ -1,8 +1,10 @@
 import pygame
+from pygame.locals import *
 from constantes import *
 from auxiliar import Auxiliar
 from disparos import Fire
 from bullet import Bullet
+
 class Player:
     def __init__(self,x,y,speed_walk,speed_run,gravity,jump_power,frame_rate_ms,move_rate_ms,jump_height,p_scale=1,interval_time_jump=100) -> None:
         '''
@@ -51,6 +53,7 @@ class Player:
         self.is_knife = False
 
         self.direccion = 1
+        self.ultimo_disparo=0
 
         self.tiempo_transcurrido_animation = 0
         self.frame_rate_ms = frame_rate_ms 
@@ -62,7 +65,7 @@ class Player:
         self.tiempo_transcurrido = 0
         self.tiempo_last_jump = 0 # en base al tiempo transcurrido general
         self.interval_time_jump = interval_time_jump
-        self.grupo_balas = pygame.sprite.Group()
+    
 
         self.rect_disparos = pygame.Rect(self.collition_rect.x, self.rect.width,self.collition_rect.y, self.rect.height)
         self.rect_disparos.width = 1000
@@ -197,23 +200,36 @@ class Player:
             else: 
                 self.frame = 0
 
-    # def disparo_player(self):
-    #     self.contador_cd = pygame.time.get_ticks()
-    #     if self.direction == DIRECTION_L:
-    #         self.bullet_list.append(Bullet(self, self.rect.left, self.rect.centery, 1800, self.rect.centery, 5, path="images/caracters/enemies/ork_sword/IDLE/bullet (1).png", frame_rate_ms=50, move_rate_ms=20, width=80, height=10))
-    #         self.can_shoot = False
-    #         self.last_shoot_time = self.contador_cd
-    #     elif self.direction == DIRECTION_R:
-    #         self.bullet_list.append(Bullet(self, self.rect.right, self.rect.centery, 0, self.rect.centery, 5, path="images/caracters/enemies/ork_sword/IDLE/bullet (1).png", frame_rate_ms=50, move_rate_ms=20, width=80, height=10))
-    #         self.can_shoot = False
-    #         self.last_shoot_time = self.contador_cd
+    def can_shoot(self):
+        contador_disparo = pygame.time.get_ticks() 
+        if contador_disparo - self.ultimo_disparo > 750:
+            self.ultimo_disparo = contador_disparo
+            return True
+        else:
+            return False
+      
+
+    def disparo_player(self,bullet_list,lista_enemigos):
+            self.contador_cd = pygame.time.get_ticks()
+            
+            if self.can_shoot():
+                
+                if self.direction == DIRECTION_R:
+                    bullet_list.append(Bullet(self, x_init=self.rect.right+14, y_init=self.rect.centery -13,x_end= 1800,y_end= self.rect.centery,speed=10, path="images/caracters/enemies/ork_sword/IDLE/bullet (1).png", frame_rate_ms=100, move_rate_ms=20, width=8, height=10))
+                    
+                    
+                elif self.direction == DIRECTION_L:
+                    bullet_list.append(Bullet(self, x_init=self.rect.left+14, y_init=self.rect.centery-13,x_end= 0, y_end=self.rect.centery,speed=10, path="images/caracters/enemies/ork_sword/IDLE/bullet (1).png", frame_rate_ms=100, move_rate_ms=20, width=8, height=10))
+                    
+                    
+
 
  
     def update(self,delta_ms,plataform_list,list_coin):
         self.do_movement(delta_ms,plataform_list)
         self.do_animation(delta_ms)
         self.points(list_coin)
-        #self.disparo_player()
+        
         self.rect_disparos.center = self.rect.center
         
         
@@ -223,17 +239,18 @@ class Player:
         if(DEBUG):
             pygame.draw.rect(screen,color=(255,0 ,0),rect=self.collition_rect)
             pygame.draw.rect(screen,color=(255,255,0),rect=self.ground_collition_rect)
-            #pygame.draw.rect(screen,color=(250,251,100),rect=self.rect_disparos)
+            pygame.draw.rect(screen,color=(250,251,100),rect=self.rect_disparos)
         
         self.image = self.animation[self.frame]
         screen.blit(self.image,self.rect)
-        # for bala in self.bullet_list:
-        #     bala.draw(screen)
+        
+        for bala in self.bullet_list:
+            bala.draw(screen)
     
         
         
 
-    def events(self,delta_ms,keys):
+    def events(self,delta_ms,keys,bullet_list,enemigo):
         self.tiempo_transcurrido += delta_ms
 
         if(not keys[pygame.K_LEFT] and not keys[pygame.K_RIGHT] and not keys[pygame.K_SPACE]and not keys[pygame.K_a] and not keys[pygame.K_s]):
@@ -275,19 +292,8 @@ class Player:
         if(keys[pygame.K_s] and not keys[pygame.K_a]and not keys[pygame.K_LEFT] and not keys[pygame.K_RIGHT] and not keys[pygame.K_SPACE]):
             self.move_x= 0
             self.shoot()
-            # self.disparo_player()
-            # self.contador_cd = pygame.time.get_ticks()
-            # if self.direction == DIRECTION_L:
-            #     self.bullet_list.append(Bullet(self, self.rect.left, self.rect.centery, 1800, self.rect.centery, 5, path="images/caracters/enemies/ork_sword/IDLE/bullet (1).png", frame_rate_ms=50, move_rate_ms=20, width=80, height=10))
-            #     self.can_shoot = False
-            #     self.last_shoot_time = self.contador_cd
-            # elif self.direction == DIRECTION_R:
-            #     self.bullet_list.append(Bullet(self, self.rect.right, self.rect.centery, 0, self.rect.centery, 5, path="images/caracters/enemies/ork_sword/IDLE/bullet (1).png", frame_rate_ms=50, move_rate_ms=20, width=80, height=10))
-            #     self.can_shoot = False
-            #     self.last_shoot_time = self.contador_cd
-
-            
-            
+            print("pressed S")
+            self.disparo_player(bullet_list,enemigo)
 
         if(keys[pygame.K_a] and not keys[pygame.K_s]and not keys[pygame.K_LEFT] and not keys[pygame.K_RIGHT] and not keys[pygame.K_SPACE]):
             self.move_x= 0
