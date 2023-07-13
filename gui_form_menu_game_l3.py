@@ -16,13 +16,19 @@ from botin import Coins
 from trap import Fire
 
 
-class FormGameLevel1(Form):
+class FormGameLevel3(Form):
     def __init__(self,name,master_surface,x,y,w,h,color_background,color_border,active):
         super().__init__(name,master_surface,x,y,w,h,color_background,color_border,active)
 
         # --- GUI WIDGET --- 
-        self.boton1 = Button(master=self,x=0,y=0,w=140,h=50,color_background=None,color_border=None,image_background="images/gui/set_gui_01/Comic_Border/Buttons/Button_M_02.png",on_click=self.on_click_boton1,on_click_param="form_menu_B",text="BACK",font="Verdana",font_size=30,font_color=C_WHITE)
-        self.boton2 = Button(master=self,x=200,y=0,w=140,h=50,color_background=None,color_border=None,image_background="images/gui/set_gui_01/Comic_Border/Buttons/Button_M_02.png",on_click=self.on_click_boton1,on_click_param="form_menu_B",text="PAUSE",font="Verdana",font_size=30,font_color=C_WHITE)
+        self.boton1 = Button(master=self,x=0,y=0,w=140,h=50,color_background=None,color_border=None,
+                             image_background="images/gui/set_gui_01/Comic_Border/Buttons/Button_M_02.png",
+                             on_click=self.on_click_boton1,on_click_param="form_menu_levels",text="BACK",font="Verdana",
+                             font_size=30,font_color=C_WHITE)
+        self.boton2 = Button(master=self,x=200,y=0,w=140,h=50,color_background=None,color_border=None,
+                             image_background="images/gui/set_gui_01/Comic_Border/Buttons/Button_M_02.png",
+                             on_click=self.on_click_boton1,on_click_param="form_menu_B",text="PAUSE",font="Verdana",
+                             font_size=30,font_color=C_WHITE)
         #self.boton_shoot = Button(master=self,x=400,y=0,w=140,h=50,color_background=None,color_border=None,image_background="images/gui/set_gui_01/Comic_Border/Buttons/Button_M_02.png",on_click=self.on_click_shoot,on_click_param="form_menu_B",text="SHOOT",font="Verdana",font_size=30,font_color=C_WHITE)
        
         self.pb_lives = ProgressBar(master=self,x=500,y=50,w=240,h=50,color_background=None,color_border=None,image_background="images/gui/set_gui_01/Comic_Border/Bars/Bar_Background01.png",image_progress="images/gui/set_gui_01/Comic_Border/Bars/Bar_Segment05.png",value = 5, value_max=5)
@@ -36,23 +42,23 @@ class FormGameLevel1(Form):
         self.player_1 = Player(x=0,y=400,speed_walk=10,speed_run=12,gravity=14,jump_power=35,frame_rate_ms=100,move_rate_ms=50,jump_height=140,p_scale=3,interval_time_jump=300)
 
         self.trap_list = []
-        for Traps in datos_extraidos["niveles"]["nivel_1"]["config_trap"]:
+        for Traps in datos_extraidos["niveles"]["nivel_3"]["config_trap"]:
             x,y,w,h= Traps
             self.trap_list.append(Fire(x,y,w,h))
 
         self.enemy_list = []
-        for Enemigos in datos_extraidos["niveles"]["nivel_1"]["config_enemigos"]:
+        for Enemigos in datos_extraidos["niveles"]["nivel_3"]["config_enemigos"]:
             x,y,speed_walk,speed_run,gravity,frame_rate_ms,move_rate_ms,jump_power,jump_height,p_scale = Enemigos
             self.enemy_list.append(Enemy(x,y,speed_walk,speed_run,gravity,frame_rate_ms,move_rate_ms,jump_power,jump_height,p_scale))
         
         self.plataform_list = []
-        for Plataforma in datos_extraidos["niveles"]["nivel_1"]["config_plataformas"]:
+        for Plataforma in datos_extraidos["niveles"]["nivel_3"]["config_plataformas"]:
             x,y,w,h,tipo= Plataforma
             self.plataform_list.append(Plataform(x,y,w,h,tipo))
             
         ##listas coin
         self.coin_list = []
-        for Coin in datos_extraidos["niveles"]["nivel_1"]["config_coins"]:
+        for Coin in datos_extraidos["niveles"]["nivel_3"]["config_coins"]:
             xx,yy,width,height,tipo= Coin
             self.coin_list.append(Coins(xx,yy,width,height,tipo))
 

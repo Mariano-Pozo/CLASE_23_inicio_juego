@@ -15,19 +15,19 @@ class FormMenuSettings(Form):
         # Iniciar la reproducción del sonido 
         pygame.mixer.music.play(-1)
         # BACK
-        self.boton1 = Button(master = self, x = 20, y = 180, w = 180, h = 80,
+        self.boton1 = Button(master = self, x = 20, y = 180, w = 160, h = 80,
             color_background = None, color_border = None,image_background = "images\gui\set_gui_01\Comic_Border\Buttons\Button_XL_06.png",
-            on_click = self.on_click_boton1,on_click_param = "form_game_L2",text = "BACK",font = "Times",font_size = 30,font_color = C_BLACK)
+            on_click = self.on_click_boton1,on_click_param = "form_menu_levels",text = "BACK",font = "Times",font_size = 30,font_color = C_BLACK)
         # vol+
-        self.boton2 = Button(master = self, x = 20, y = 20, w = 180, h = 80, color_background = None,
+        self.boton2 = Button(master = self, x = 20, y = 20, w = 160, h = 80, color_background = None,
             color_border = None, image_background = "images/gui/set_gui_01/Comic_Border/Buttons/Button_XL_06.png", 
             on_click = self.on_click_boton2,on_click_param = "settings",text = "VOL+",font = "Times",font_size = 30,font_color = C_BLACK)
         # vol-
-        self.boton3 = Button(master = self, x = 20, y = 100, w = 180, h = 80, 
+        self.boton3 = Button(master = self, x = 20, y = 100, w = 160, h = 80, 
             color_background = None, color_border = None, image_background = "images\gui\set_gui_01\Comic_Border\Buttons\Button_XL_06.png", 
             on_click = self.on_click_boton3,on_click_param = "settings",text = "VOL-",font = "Times",font_size = 30,font_color = C_BLACK)
         # MUTE
-        self.boton4 = Button(master = self, x = 20, y = 260, w = 180, h = 80, 
+        self.boton4 = Button(master = self, x = 20, y = 260, w = 160, h = 80, 
             color_background = None, color_border = None, image_background = "images\gui\set_gui_01\Comic_Border\Buttons\Button_XL_06.png", 
             on_click = self.on_click_boton4,on_click_param = "settings",text = "MUTE",font = "Times",font_size = 30,font_color = C_BLACK)
 

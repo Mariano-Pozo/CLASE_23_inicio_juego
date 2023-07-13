@@ -51,6 +51,7 @@ class Player:
         self.is_fall = False
         self.is_shoot = False
         self.is_knife = False
+        self.vivo = True
 
         self.direccion = 1
         self.ultimo_disparo=0
@@ -221,16 +222,23 @@ class Player:
                 elif self.direction == DIRECTION_L:
                     bullet_list.append(Bullet(self, x_init=self.rect.left+14, y_init=self.rect.centery-13,x_end= 0, y_end=self.rect.centery,speed=10, path="images/caracters/enemies/ork_sword/IDLE/bullet (1).png", frame_rate_ms=100, move_rate_ms=20, width=8, height=10))
                     
-                    
 
+    def check_alive(self):
+        if self.lives <= 0:
+            self.lives = 0
+            self.speed_walk = 0
+            self.vivo = False
+            print("MORIDO")
+            
 
  
     def update(self,delta_ms,plataform_list,list_coin):
-        self.do_movement(delta_ms,plataform_list)
-        self.do_animation(delta_ms)
-        self.points(list_coin)
-        
-        self.rect_disparos.center = self.rect.center
+        if self.vivo:
+            self.do_movement(delta_ms,plataform_list)
+            self.do_animation(delta_ms)
+            self.points(list_coin)
+            self.check_alive()
+            self.rect_disparos.center = self.rect.center
         
         
     

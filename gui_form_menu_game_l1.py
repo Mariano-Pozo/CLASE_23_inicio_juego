@@ -21,8 +21,14 @@ class FormGameLevel1(Form):
         super().__init__(name,master_surface,x,y,w,h,color_background,color_border,active)
 
         # --- GUI WIDGET --- 
-        self.boton1 = Button(master=self,x=0,y=0,w=140,h=50,color_background=None,color_border=None,image_background="images/gui/set_gui_01/Comic_Border/Buttons/Button_M_02.png",on_click=self.on_click_boton1,on_click_param="form_menu_B",text="BACK",font="Verdana",font_size=30,font_color=C_WHITE)
-        self.boton2 = Button(master=self,x=200,y=0,w=140,h=50,color_background=None,color_border=None,image_background="images/gui/set_gui_01/Comic_Border/Buttons/Button_M_02.png",on_click=self.on_click_boton1,on_click_param="form_menu_B",text="PAUSE",font="Verdana",font_size=30,font_color=C_WHITE)
+        self.boton1 = Button(master=self,x=0,y=0,w=140,h=50,color_background=None,color_border=None,
+                             image_background="images/gui/set_gui_01/Comic_Border/Buttons/Button_M_02.png",
+                             on_click=self.on_click_boton1,on_click_param="form_menu_levels",text="levels",font="Verdana",
+                             font_size=30,font_color=C_WHITE)
+        self.boton2 = Button(master=self,x=200,y=0,w=140,h=50,color_background=None,color_border=None,
+                             image_background="images/gui/set_gui_01/Comic_Border/Buttons/Button_M_02.png",
+                             on_click=self.on_click_boton1,on_click_param="form_menu_B",text="PAUSE",font="Verdana",
+                             font_size=30,font_color=C_WHITE)
         #self.boton_shoot = Button(master=self,x=400,y=0,w=140,h=50,color_background=None,color_border=None,image_background="images/gui/set_gui_01/Comic_Border/Buttons/Button_M_02.png",on_click=self.on_click_shoot,on_click_param="form_menu_B",text="SHOOT",font="Verdana",font_size=30,font_color=C_WHITE)
        
         self.pb_lives = ProgressBar(master=self,x=500,y=50,w=240,h=50,color_background=None,color_border=None,image_background="images/gui/set_gui_01/Comic_Border/Bars/Bar_Background01.png",image_progress="images/gui/set_gui_01/Comic_Border/Bars/Bar_Segment05.png",value = 5, value_max=5)
