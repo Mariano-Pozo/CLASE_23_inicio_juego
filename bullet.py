@@ -2,6 +2,7 @@ from player import *
 from constantes import *
 from auxiliar import Auxiliar
 import math
+from boss import Boss
 
 class Bullet():
     
@@ -60,6 +61,13 @@ class Bullet():
                 aux_enemy.lives -= 1
                 if aux_enemy.lives <= 0:
                     enemy_list.remove(aux_enemy)
+        
+        # if(self.is_active and self.owner != Boss.rect and self.rect.colliderect(aux_enemy.rect)):
+        #         print("IMPACTO boss")
+        #         self.is_active = False
+        #         aux_enemy.lives -= 1
+        #         if aux_enemy.lives <= 0:
+        #             enemy_list.remove(aux_enemy)
 
     def update(self,delta_ms,plataform_list,enemy_list,player):
         self.do_movement(delta_ms,plataform_list,enemy_list,player)

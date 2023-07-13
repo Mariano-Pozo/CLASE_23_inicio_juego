@@ -2,22 +2,21 @@ import pygame
 from player import *
 from constantes import *
 from auxiliar import Auxiliar
-
-class Enemy():
+class Boss():
     
     def __init__(self,x,y,speed_walk,speed_run,gravity,jump_power,frame_rate_ms,move_rate_ms,jump_height,p_scale=1,interval_time_jump=100) -> None:
         
-        self.walk_r = Auxiliar.getSurfaceFromSeparateFiles("images\caracters\enemies\ork_sword\IDLE\enemyrangewalking ({}).png",1,4,scale=p_scale)
-        self.walk_l = Auxiliar.getSurfaceFromSeparateFiles("images\caracters\enemies\ork_sword\IDLE\enemyrangewalking ({}).png",1,4,flip=True,scale=p_scale)
-        self.stay_r = Auxiliar.getSurfaceFromSeparateFiles("images\caracters\enemies\ork_sword\IDLE\enemyrangestay (1).png",1,1,scale=p_scale)
-        self.stay_l = Auxiliar.getSurfaceFromSeparateFiles("images\caracters\enemies\ork_sword\IDLE\enemyrangestay (1).png",1,1,flip=True,scale=p_scale)
-        self.hit_r = Auxiliar.getSurfaceFromSeparateFiles("images\caracters\enemies\ork_sword\IDLE\enemyrangeashot ({}).png",1,5,scale=p_scale)
-        self.hit_l = Auxiliar.getSurfaceFromSeparateFiles("images\caracters\enemies\ork_sword\IDLE\enemyrangeashot ({}).png",1,5,scale=p_scale)
+        self.stay_r = Auxiliar.getSurfaceFromSeparateFiles("images/caracters/enemies/ork_sword/IDLE/boss_stay.png",0,1,scale=3)
+        self.stay_l = Auxiliar.getSurfaceFromSeparateFiles("images/caracters/enemies/ork_sword/IDLE/boss_stay.png",0,1,flip=True, scale=3)
+        self.walk_r = Auxiliar.getSurfaceFromSeparateFiles("images/caracters/enemies/ork_sword/IDLE/boss_stay.png",0,1,scale=3)
+        self.walk_l = Auxiliar.getSurfaceFromSeparateFiles("images/caracters/enemies/ork_sword/IDLE/boss_stay.png",0,1,flip=True, scale=3)
+        self.attack_r = Auxiliar.getSurfaceFromSeparateFiles("images/caracters/enemies/ork_sword/IDLE/boss_attack ({}).png",1,5,scale=3)
+        self.attack_l = Auxiliar.getSurfaceFromSeparateFiles("images/caracters/enemies/ork_sword/IDLE/boss_attack ({}).png",1,5,flip=True, scale=3)
 
         self.ultimo_disparo=0
         self.contador = 0
         self.frame = 0
-        self.lives = 5
+        self.lives = 10
         self.score = 0
         self.move_x = 0
         self.move_y = 0
@@ -123,16 +122,14 @@ class Enemy():
 
     def can_shoot(self):
         contador_disparo = pygame.time.get_ticks() 
-        if contador_disparo - self.ultimo_disparo > 2000:
+        if contador_disparo - self.ultimo_disparo > 1000:
             self.ultimo_disparo = contador_disparo
             return True
         else:
             return False
 
-
     def puede_golpear_jugador(self,jugador):
         return self.collition_rect.colliderect(jugador.rect_disparos) and self.can_shoot() and jugador.lives > 0 and self.lives >0
-
 
     def automatic_shoot(self,jugador,lista):
         self.contador_cd = pygame.time.get_ticks() 
@@ -148,7 +145,6 @@ class Enemy():
         if self.collition_rect.colliderect(jugador.collition_rect) and self.can_shoot():
             self.melee_attack(jugador)
 
-
     def melee_attack(self,jugador):  
         
         if(self.is_jump == False and self.is_fall == False):
@@ -160,14 +156,11 @@ class Enemy():
                     self.animation = self.hit_l      
                 jugador.receive_shoot()
         
-
-
     def update(self,delta_ms,plataform_list,jugador,lista):
         self.do_movement(delta_ms,plataform_list)
         self.do_animation(delta_ms)
         self.automatic_shoot(jugador,lista)
         self.do_knife(jugador)
-        
 
     def draw(self,screen):
         
@@ -181,14 +174,13 @@ class Enemy():
     def receive_shoot(self):
         self.lives -= 1
 
-    
-
     def kill_enemy(self):
         self.lives -= 1
         if self.lives <= 0:
-            Player.score += 1000
+            Player.score += 9999
 
     
     
+
 
 
